@@ -21,14 +21,16 @@ function Shop() {
                 quantity: 1,
             }
             setOrder([...order, newItem])
-        } else {
+        }
+        else {
             const newOrder = order.map((orderItem, index) => {
                 if (index === itemIndex) {
                     return {
                         ...orderItem,
                         quantity: orderItem.quantity + 1
                     }
-                } else {
+                }
+                else {
                     return orderItem;
                 }
             });
@@ -41,23 +43,38 @@ function Shop() {
         setOrder(newOrder);
     }
 
-    const handleBasketShow = () => {
-        setBasketShow(!isBasketShow);
-    }
-
-    const updateQuantity = (itemId, newQuantity) => {
-        if (newQuantity <= 0) return;
-        const newOrder = order.map((orderItem) => {
-            if (orderItem.id === itemId) {
+    const incQuantity = (itemId) => {
+        const newOrder = order.map((el) => {
+            if (el.id === itemId) {
+                const newQuantity = el.quantity + 1;
                 return {
-                    ...orderItem,
-                    quantity: newQuantity
-                }
+                    ...el,
+                    quantity: newQuantity,
+                };
             } else {
-                return orderItem;
+                return el;
             }
         });
         setOrder(newOrder);
+    }
+
+    const decQuantity = (itemId) => {
+        const newOrder = order.map((el) => {
+            if (el.id === itemId) {
+                const newQuantity = el.quantity - 1;
+                return {
+                    ...el,
+                    quantity: newQuantity >= 0 ? newQuantity : 0,
+                };
+            } else {
+                return el;
+            }
+        });
+        setOrder(newOrder);
+    }
+
+    const handleBasketShow = () => {
+        setBasketShow(!isBasketShow);
     }
 
     useEffect(function getGoods() {
@@ -86,7 +103,8 @@ function Shop() {
                     order={order}
                     handleBasketShow={handleBasketShow}
                     removeFromBasket={removeFromBasket}
-                    updateQuantity={updateQuantity}
+                    incQuantity={incQuantity}
+                    decQuantity={decQuantity}
                 />
             }
         </main>
